@@ -1,11 +1,12 @@
 var express = require("express");
 var router = express.Router();
+var NodeGeocoder = require("node-geocoder");
 var Memo = require("../models/memo");
 var User = require("../models/user");
 var Notification = require("../models/notification");
 var Comment = require("../models/comment");
+var Review = require("../models/review");
 var middleware = require("../middleware");
-var NodeGeocoder = require("node-geocoder");
 
 var options = {
   provider: "google",
@@ -109,11 +110,15 @@ router.get("/:id", function(req, res) {
   //find the memo with provided ID
   Memo.findById(req.params.id)
     .populate("comments likes")
+    .populate({
+      path: "reviews",
+      options: { sort: { createdAt: -1 } }
+    })
     .exec(function(err, foundMemo) {
       if (err) {
         console.log(err);
       } else {
-        //render show template with that campground
+        //render show template with that memo
         res.render("memos/show", { memo: foundMemo });
       }
     });
@@ -129,6 +134,7 @@ router.get("/:id/edit", middleware.checkMemoOwnership, function(req, res) {
 // UPDATE MEMO ROUTE
 // IT'S A PUT REQUEST
 router.put("/:id", middleware.checkMemoOwnership, function(req, res) {
+  delete req.body.campground.rating;
   geocoder.geocode(req.body.memo_location, function(err, data) {
     if (err || !data.length) {
       req.flash("error", "Invalid address");
@@ -153,13 +159,37 @@ router.put("/:id", middleware.checkMemoOwnership, function(req, res) {
 
 // DESTROY MEMO ROUTE
 router.delete("/:id", middleware.checkMemoOwnership, function(req, res) {
-  Memo.findByIdAndRemove(req.params.id, function(err, memoRemoved) {
+  Memo.findById(req.params.id, function(err, memo) {
     if (err) {
       res.redirect("/memos");
     } else {
-      res.redirect("/memos");
+      // deletes all comments associated with the memo
+      Comment.remove({ _id: { $in: memo.comments } }, function(err) {
+        if (err) {
+          console.log(err);
+          return res.redirect("/memos");
+        }
+        // deletes all reviews associated with the memo
+        Review.remove({ _id: { $in: memo.reviews } }, function(err) {
+          if (err) {
+            console.log(err);
+            return res.redirect("/memos");
+          }
+          //  delete the memo
+          memo.remove();
+          req.flash("success", "Memo deleted successfully!");
+          res.redirect("/memos");
+        });
+      });
     }
   });
+  // Memo.findByIdAndRemove(req.params.id, function(err, memoRemoved) {
+  //   if (err) {
+  //     res.redirect("/memos");
+  //   } else {
+  //     res.redirect("/memos");
+  //   }
+  // });
 });
 // Memo Like Route
 router.post("/:id/like", middleware.isLoggedIn, function(req, res) {

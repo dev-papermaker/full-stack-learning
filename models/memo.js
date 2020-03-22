@@ -1,4 +1,6 @@
 var mongoose = require("mongoose");
+var Comment = require("./comment");
+var Review = require("./review");
 
 var memoSchema = new mongoose.Schema({
   memo_title: String,
@@ -18,6 +20,7 @@ var memoSchema = new mongoose.Schema({
     }
   ],
   author: {
+    // user reference setting?
     id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
@@ -29,7 +32,17 @@ var memoSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment"
     }
-  ]
+  ],
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review"
+    }
+  ],
+  rating: {
+    type: Number,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model("Memo", memoSchema);

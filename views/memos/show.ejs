@@ -17,55 +17,106 @@
         <div class="caption-full">
           <h4><a><%=memo.memo_title %></a></h4>
           <p><%= memo.memo_description %></p>
-          <p>Posted by: <a href="/users/<%= memo.author.id %>"><%= memo.author.username %></a>, <%= moment(memo.createdAt).fromNow() %></p>
+          <p>Posted by: <a href="/users/<%= memo.author.id %>"><%= memo.author.username %></a>,
+            <%= moment(memo.createdAt).fromNow() %></p>
           <p>Topic: <span class="label label-info"><%= memo.memo_topic %></span></p>
           <hr />
           <div style="padding-bottom: 10px;">
-              <form action="/memos/<%= memo._id %>/like" method="POST">
-                  <div class="btn-group">
-                      <% if (currentUser && memo.likes.some(function (like) {
+            <form action="/memos/<%= memo._id %>/like" method="POST">
+              <div class="btn-group">
+                <% if (currentUser && memo.likes.some(function (like) {
                           return like.equals(currentUser._id)
                       })) { %>
-                          <button class="btn btn-sm btn-primary">
-                              <i class="fas fa-thumbs-up"></i> Liked (<%= memo.likes.length %>)
-                          </button>
-                      <% } else { %>
-                          <button class="btn btn-sm btn-secondary">
-                              <i class="fas fa-thumbs-up"></i> Like (<%= memo.likes.length %>)
-                          </button>
-                      <% } %>
-                      <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#memoLikes">See more details
-                      </button>
-                  </div>
-              </form>
+                <button class="btn btn-sm btn-primary">
+                  <i class="fas fa-thumbs-up"></i> Liked (<%= memo.likes.length %>)
+                </button>
+                <% } else { %>
+                <button class="btn btn-sm btn-secondary">
+                  <i class="fas fa-thumbs-up"></i> Like (<%= memo.likes.length %>)
+                </button>
+                <% } %>
+                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#memoLikes">See
+                  more details
+                </button>
+              </div>
+            </form>
           </div>
-            <% if(currentUser &&
+          <% if(currentUser &&
             memo.author.id.equals(currentUser._id)){%>
-            <a
-              class="btn btn-xs btn-warning"
-              href="/memos/<%= memo._id %>/edit"
-              >Edit</a
-            >
+          <a class="btn btn-xs btn-warning" href="/memos/<%= memo._id %>/edit">Edit</a>
           </p>
 
-          <form
-            class="delete-form"
-            action="/memos/<%= memo._id %>?_method=DELETE"
-            method="POST"
-          >
+          <form class="delete-form" action="/memos/<%= memo._id %>?_method=DELETE" method="POST">
             <input type="submit" class="btn btn-xs btn-danger" value="Delete" />
           </form>
           <% } %>
         </div>
       </div>
 
+      <!-- Review section -->
+      <div class="thumbnail">
+        <div class="caption-full">
+          <% if (memo.rating === 0) { %>
+          <h5>
+            <em>No reviews yet.</em>
+          </h5>
+          <% } else { %>
+          <p>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star <% if (memo.rating > 1.5) { %> checked <% } %>"></span>
+            <span class="fa fa-star <% if (memo.rating > 2.5) { %> checked <% } %>"></span>
+            <span class="fa fa-star <% if (memo.rating > 3.5) { %> checked <% } %>"></span>
+            <span class="fa fa-star <% if (memo.rating > 4.5) { %> checked <% } %>"></span>
+            <em>(total reviews: <%= memo.reviews.length %>)</em>
+          </p>
+          <p>
+            Current memo rating: <strong><%= memo.rating.toFixed(2) %></strong>
+          </p>
+          <p>
+            <h4>Latest reviews for this memo:</h4>
+          </p>
+          <hr style="margin-top: 0;">
+          <% memo.reviews.slice(0, 5).forEach(function(review){ %>
+          <div class="row">
+            <div class="col-md-3">
+              <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
+              <div>Review by: <strong><%= review.author.username %></strong></div>
+              <span><em><%= review.updatedAt.toDateString() %></em></span>
+            </div>
+            <div class="col-md-9">
+              <p style="text-align: justify; word-wrap: break-word;">
+                <%= review.text %>
+              </p>
+              <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+              <a class="btn btn-xs btn-warning"
+                href="/memos/<%=memo._id %>/reviews/<%=review._id %>/edit">Edit</a>
+              <form id="delete-form" action="/memos/<%=memo._id %>/reviews/<%=review._id %>?_method=DELETE"
+                method="POST">
+                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+              </form>
+              <% } %>
+            </div>
+          </div>
+          <hr>
+          <% }); %>
+          <div style="margin-bottom: 10px;">
+            <h4><a href="/memos/<%= memo._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See
+                all
+                reviews</a></h4>
+          </div>
+          <% } %>
+          <div>
+            <a class="btn btn-primary btn-lg <% if (currentUser && memo.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
+              href="/memos/<%= memo._id %>/reviews/new">
+              Write a New Review</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment section -->
       <div class="well">
         <div class="text-right">
-          <a
-            class="btn btn-success"
-            href="/memos/<%= memo._id %>/comments/new"
-            >Add New Comment</a
-          >
+          <a class="btn btn-success" href="/memos/<%= memo._id %>/comments/new">Add New Comment</a>
         </div>
 
         <hr />
@@ -79,29 +130,20 @@
             </p>
             <% if(currentUser &&
             memo.author.id.equals(currentUser._id)){%>
-            <a
-              class="btn btn-xs btn-warning"
-              href="/memos/<%= memo._id %>/comments/<%= comment._id %>/edit"
-              >Edit</a
-            >
+            <a class="btn btn-xs btn-warning" href="/memos/<%= memo._id %>/comments/<%= comment._id %>/edit">Edit</a>
 
-            <form
-              class="delete-form"
-              action="/memos/<%= memo._id %>/comments/<%= comment._id %>?_method=DELETE"
-              method="POST"
-            >
-              <input
-                type="submit"
-                class="btn btn-xs btn-danger"
-                value="Delete"
-              />
+            <form class="delete-form" action="/memos/<%= memo._id %>/comments/<%= comment._id %>?_method=DELETE"
+              method="POST">
+              <input type="submit" class="btn btn-xs btn-danger" value="Delete" />
             </form>
             <% };%>
           </div>
         </div>
         <% }) %>
       </div>
-      <a href="/memos">Go Back</a>
+      <div style="margin-top: 10px;">
+        <a class="btn btn-default" href="/memos"><i class="fa fa-arrow-left"></i> Go back</a>
+      </div>
     </div>
   </div>
 </div>
@@ -170,5 +212,6 @@
     });
   }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHScERoqiQVK8K0OqaOBc4qeTcTXY8SWk&callback=initMap"></script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHScERoqiQVK8K0OqaOBc4qeTcTXY8SWk&callback=initMap"></script>
 <% include ../partials/footer %>

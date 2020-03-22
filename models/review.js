@@ -1,4 +1,6 @@
 var mongoose = require("mongoose");
+var User = require("./user");
+var Memo = require("./memo");
 
 var reviewSchema = new mongoose.Schema(
   {
@@ -29,7 +31,7 @@ var reviewSchema = new mongoose.Schema(
       },
       username: String
     },
-    // campground associated with the review
+    // memo associated with the review
     memo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Memo"

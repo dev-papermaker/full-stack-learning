@@ -30,7 +30,15 @@
         <img src="<%= memo.memo_image %>" alt="image">
         <div class="caption">
           <h4><%= memo.memo_title %></h4>
-          <!-- <p class="thumbnail-p"><%= memo.memo_description %></p> -->
+          <% if (memo.rating === 0) { %>
+          <em>No reviews yet.</em>
+          <% } else { %>
+          <span class="fa fa-star checked"></span>
+          <span class="fa fa-star <% if (memo.rating > 1.5) { %> checked <% } %>"></span>
+          <span class="fa fa-star <% if (memo.rating > 2.5) { %> checked <% } %>"></span>
+          <span class="fa fa-star <% if (memo.rating > 3.5) { %> checked <% } %>"></span>
+          <span class="fa fa-star <% if (memo.rating > 4.5) { %> checked <% } %>"></span>
+          <% } %>
           <div>
               <span class="badge label-primary"><i class="fas fa-thumbs-up"></i> <%= memo.likes.length %></span>
           </div>

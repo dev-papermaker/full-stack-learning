@@ -17,6 +17,7 @@ const express = require("express"),
 // REQUIRING ROUTES
 const commentRoutes = require("./routes/comments"),
   memoRoutes = require("./routes/memos"),
+  reviewRoutes = require("./routes/reviews"),
   indexRoutes = require("./routes/index");
 
 mongoose
@@ -81,6 +82,7 @@ app.use(async function(req, res, next) {
 app.use(indexRoutes);
 app.use("/memos", memoRoutes);
 app.use("/memos/:id/comments", commentRoutes);
+app.use("/memos/:id/reviews", reviewRoutes);
 
 app.listen(3000, () => {
   console.log("server is on 3000.");
