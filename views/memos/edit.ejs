@@ -1,0 +1,43 @@
+<% include ../partials/header %>
+<div class="container">
+  <div class="row">
+    <h1 style="text-align: center">Edit <%= memo.name %></h1>
+    <div style="width: 30%; margin: 25px auto;">
+      <form action="/memos/<%= memo._id %>?_method=PUT" method="POST">
+        <div class="form-group">
+          <label for="memo_title">Title:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_title"
+            value="<%= memo.memo_title %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="memo_description">Description:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_description"
+            value="<%= memo.memo_description %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="memo_location">Location:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_location"
+            id="location"
+            value="<%= memo.memo_location %>"
+          />
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block">Submit</button>
+        </div>
+      </form>
+      <a href="/memos">Go Back</a>
+    </div>
+  </div>
+</div>
+<% include ../partials/footer %>

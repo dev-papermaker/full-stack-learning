@@ -1,0 +1,60 @@
+<% include ../partials/header %>
+<div class="container">
+  <div class="row">
+    <h1 style="text-align: center">Create a New Memo!</h1>
+    <div style="width: 30%; margin: 25px auto;">
+      <form action="/memos" method="POST">
+        <div class="form-group">
+          <label for="memo_title">Title:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_title"
+            placeholder="Title"
+          />
+        </div>
+        <div class="form-group">
+          <label for="memo_description">Description:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_description"
+            placeholder="Description"
+          />
+        </div>
+        <div class="form-group">
+          <label for="memo_image">Image:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_image"
+            placeholder="Image"
+          />
+        </div>
+        <div class="form-group">
+          <label for="memo_location">Location:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_location"
+            placeholder="Location"
+          />
+        </div>
+        <div class="form-group">
+          <label for="memo_topic">Topic:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="memo_topic"
+            placeholder="Topic"
+          />
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block">Submit</button>
+        </div>
+      </form>
+      <a href="/memos">Go Back</a>
+    </div>
+  </div>
+</div>
+<% include ../partials/footer %>

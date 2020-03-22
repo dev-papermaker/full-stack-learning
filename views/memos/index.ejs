@@ -1,0 +1,47 @@
+<% include ../partials/header %>
+<div class="container">
+  <header class="jumbotron">
+    <div class="container">
+      <h1>Welcome To GPP!</h1>
+      <p>Meet gpp from all over the world</p>
+      <p>
+        <a class="btn btn-primary btn-large" href="/memos/new">Add New Memo</a>
+      </p>
+      <p>
+        <form action="/memos" method="GET" class="form-inline">
+          <div class="form-group">
+            <input type="text" name="search" placeholder="Memo Search" class="form-control">
+            <input type="submit" value="Search" class="btn btn-default">
+          </div>
+        </form>
+      </p>
+    </div>
+  </header>
+
+  <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+    <div class="col-md-12">
+      <% if(noMatch != null ){ %>
+        <h3><%= noMatch %></h3>
+      <% } %>
+    </div>
+    <% memos.forEach(function(memo){ %>
+    <div class="col-md-3 col-sm-6">
+      <div class="thumbnail">
+        <img src="<%= memo.memo_image %>" alt="image">
+        <div class="caption">
+          <h4><%= memo.memo_title %></h4>
+          <!-- <p class="thumbnail-p"><%= memo.memo_description %></p> -->
+          <div>
+              <span class="badge label-primary"><i class="fas fa-thumbs-up"></i> <%= memo.likes.length %></span>
+          </div>
+        </div>
+        <p>
+          <a href="/memos/<%= memo._id %>" class="btn btn-primary">More Info</a>
+        </p>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</div>
+
+<% include ../partials/footer %>

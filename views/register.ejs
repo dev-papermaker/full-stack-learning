@@ -1,0 +1,30 @@
+<% include ./partials/header %>
+<div class="container">
+  <div class="row">
+    <h1 style="text-align: center">Sign Up Form</h1>
+    <div style="width: 15%; margin: 25px auto;">
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <input type="text" name="username" placeholder="username" />
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="password" />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="email" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="avatar" placeholder="avatar url" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="industry" placeholder="industry" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="company" placeholder="company" />
+        </div>
+        <button>Sign Up</button>
+      </form>
+    </div>
+  </div>
+</div>
+<% include ./partials/footer %>

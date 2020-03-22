@@ -1,0 +1,40 @@
+<% include ../partials/header %>
+<div>
+  <div class="container">
+    <h1>User profile page</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="thumbnail">
+          <div class="caption-full">
+            <img style="width: 200px;" src="<%= user.avatar %>" />
+            <h3>username: <%= user.username %></h3>
+            <h3>user status: <%= user.status %></h3>
+            <h3>company: <%= user.company %></h3>
+            <h3>industry: <%= user.industry %></h3>
+            <a href="/follow/<%= user.id %>"
+              ><button class="btn btn-primary">
+                Follow <%= user.username %>
+              </button></a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="thumbnail">
+          <div class="caption-full">
+            <h2><%= user.username %>'s memos!</h2>
+            <ul class="list-group">
+              <% memos.forEach(function(memo){%>
+              <li class="list-group-item">
+                <a href="/memos/<%= memo._id %>"><%= memo.memo_title %></a>
+              </li>
+              <%});%>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include ../partials/footer %>
