@@ -62,17 +62,16 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
         req.flash("error", "Invalid address");
         // return res.redirect("back");
       }
-      var map = {
-        lat: data[0].latitude,
-        lng: data[0].longitude
-      };
+      var memo_lat = data[0].latitude;
+      var memo_lng = data[0].longitude;
       var memo_location = data[0].formattedAddress;
       var newMemo = {
         memo_title: memo_title,
         memo_description: memo_description,
         memo_image: memo_image,
         memo_location: memo_location,
-        map: map,
+        memo_lat: memo_lat,
+        memo_lng: memo_lng,
         memo_topic: memo_topic,
         memo_likenum: 0,
         author: author
@@ -134,14 +133,14 @@ router.get("/:id/edit", middleware.checkMemoOwnership, function(req, res) {
 // UPDATE MEMO ROUTE
 // IT'S A PUT REQUEST
 router.put("/:id", middleware.checkMemoOwnership, function(req, res) {
-  delete req.body.campground.rating;
-  geocoder.geocode(req.body.memo_location, function(err, data) {
+  delete req.body.memo.rating;
+  geocoder.geocode(req.body.location, function(err, data) {
     if (err || !data.length) {
       req.flash("error", "Invalid address");
       return res.redirect("back");
     }
-    req.body.memo.map.lat = data[0].latitude;
-    req.body.memo.map.lng = data[0].longitude;
+    req.body.memo.memo_lat = data[0].latitude;
+    req.body.memo.memo_lng = data[0].longitude;
     req.body.memo.memo_location = data[0].formattedAddress;
     // FIND AND UPDATE THE MEMO
     Memo.findByIdAndUpdate(req.params.id, req.body.memo, function(

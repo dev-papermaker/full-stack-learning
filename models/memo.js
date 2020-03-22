@@ -8,10 +8,8 @@ var memoSchema = new mongoose.Schema({
   memo_topic: String,
   memo_image: String,
   memo_location: String,
-  map: {
-    lat: Number,
-    lng: Number
-  },
+  memo_lat: Number,
+  memo_lng: Number,
   createdAt: { type: Date, default: Date.now },
   likes: [
     {

@@ -187,8 +187,8 @@
 
 <script>
   function initMap() {
-    var lat = <%= memo.map.lat %>;
-    var lng = <%= memo.map.lng %>;
+    var lat = <%= memo.memo_lat %>;
+    var lng = <%= memo.memo_lng %>;
     var center = { lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 8,

@@ -9,8 +9,16 @@
           <input
             class="form-control"
             type="text"
-            name="memo_title"
+            name="memo[memo_title]"
             value="<%= memo.memo_title %>"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            class="form-control"
+            type="text"
+            name="memo[memo_image]"
+            value="<%= memo.memo_image %>"
           />
         </div>
         <div class="form-group">
@@ -18,16 +26,16 @@
           <input
             class="form-control"
             type="text"
-            name="memo_description"
+            name="memo[memo_description]"
             value="<%= memo.memo_description %>"
           />
         </div>
         <div class="form-group">
-          <label for="memo_location">Location:</label>
+          <label for="location">Location:</label>
           <input
             class="form-control"
             type="text"
-            name="memo_location"
+            name="location"
             id="location"
             value="<%= memo.memo_location %>"
           />
